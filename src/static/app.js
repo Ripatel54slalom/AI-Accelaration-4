@@ -4,6 +4,131 @@ document.addEventListener("DOMContentLoaded", () => {
   const registerForm = document.getElementById("register-form");
   const messageDiv = document.getElementById("message");
 
+  // Function to display competency matrix in a modal
+  async function handleViewMatrix(event) {
+    const button = event.target;
+    const capability = button.getAttribute("data-capability");
+
+    try {
+      const response = await fetch(
+        `/capabilities/${encodeURIComponent(capability)}/competency-matrix`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch competency matrix");
+      }
+
+      const data = await response.json();
+      displayMatrixModal(capability, data.matrix);
+    } catch (error) {
+      alert("Failed to load competency matrix. Please try again.");
+      console.error("Error fetching competency matrix:", error);
+    }
+  }
+
+  // Function to create and display the matrix modal
+  function displayMatrixModal(capabilityName, matrix) {
+    // Create modal overlay
+    const modalOverlay = document.createElement("div");
+    modalOverlay.className = "modal-overlay";
+
+    // Create modal content
+    const modalContent = document.createElement("div");
+    modalContent.className = "modal-content";
+
+    // Build matrix HTML
+    let matrixHTML = `
+      <div class="modal-header">
+        <h2>${capabilityName} - Competency Matrix</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="matrix-intro">This competency matrix defines expectations across three key dimensions: Technical Excellence, Client & Delivery Impact, and Team & Practice Leadership.</p>
+    `;
+
+    // Iterate through skill levels
+    const skillLevels = ["Emerging", "Proficient", "Advanced", "Expert"];
+    skillLevels.forEach((level) => {
+      if (matrix[level]) {
+        matrixHTML += `
+          <div class="skill-level-section">
+            <h3 class="skill-level-title">${level}</h3>
+        `;
+
+        // Technical Excellence
+        if (matrix[level].technical_excellence) {
+          matrixHTML += `
+            <div class="dimension-section">
+              <h4 class="dimension-title">🎯 Technical Excellence</h4>
+              <ul class="criteria-list">
+          `;
+          Object.entries(matrix[level].technical_excellence).forEach(
+            ([key, value]) => {
+              matrixHTML += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`;
+            }
+          );
+          matrixHTML += `</ul></div>`;
+        }
+
+        // Client & Delivery Impact
+        if (matrix[level].client_delivery) {
+          matrixHTML += `
+            <div class="dimension-section">
+              <h4 class="dimension-title">🤝 Client & Delivery Impact</h4>
+              <ul class="criteria-list">
+          `;
+          Object.entries(matrix[level].client_delivery).forEach(
+            ([key, value]) => {
+              matrixHTML += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`;
+            }
+          );
+          matrixHTML += `</ul></div>`;
+        }
+
+        // Team & Practice Leadership
+        if (matrix[level].leadership) {
+          matrixHTML += `
+            <div class="dimension-section">
+              <h4 class="dimension-title">👥 Team & Practice Leadership</h4>
+              <ul class="criteria-list">
+          `;
+          Object.entries(matrix[level].leadership).forEach(([key, value]) => {
+            matrixHTML += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`;
+          });
+          matrixHTML += `</ul></div>`;
+        }
+
+        matrixHTML += `</div>`; // Close skill-level-section
+      }
+    });
+
+    matrixHTML += `</div>`; // Close modal-body
+
+    modalContent.innerHTML = matrixHTML;
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+
+    // Add event listener to close button
+    const closeBtn = modalContent.querySelector(".modal-close");
+    closeBtn.addEventListener("click", () => {
+      document.body.removeChild(modalOverlay);
+    });
+
+    // Close on overlay click
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) {
+        document.body.removeChild(modalOverlay);
+      }
+    });
+  }
+
+  // Helper function to format keys
+  function formatKey(key) {
+    return key
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
   // Function to fetch capabilities from API
   async function fetchCapabilities() {
     try {
@@ -37,6 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`
             : `<p><em>No consultants registered yet</em></p>`;
 
+        const competencyMatrixButton = details.has_competency_matrix
+          ? `<button class="view-matrix-btn" data-capability="${name}">📋 View Competency Matrix</button>`
+          : '';
+
         capabilityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
@@ -44,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Industry Verticals:</strong> ${details.industry_verticals ? details.industry_verticals.join(', ') : 'Not specified'}</p>
           <p><strong>Capacity:</strong> ${availableCapacity} hours/week available</p>
           <p><strong>Current Team:</strong> ${currentConsultants} consultants</p>
+          ${competencyMatrixButton}
           <div class="consultants-container">
             ${consultantsHTML}
           </div>
@@ -61,6 +191,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Add event listeners to delete buttons
       document.querySelectorAll(".delete-btn").forEach((button) => {
         button.addEventListener("click", handleUnregister);
+      });
+
+      // Add event listeners to view matrix buttons
+      document.querySelectorAll(".view-matrix-btn").forEach((button) => {
+        button.addEventListener("click", handleViewMatrix);
       });
     } catch (error) {
       capabilitiesList.innerHTML =
