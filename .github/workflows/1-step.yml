@@ -91,34 +91,41 @@ jobs:
 
                 // Split the file content into title, body, and comments
                 const title = fileContent.split('\n')[0].replace('#', '').trim();
-                const body = fileContent.split('\n').slice(1).join('\n').split('----- COMMENTS -----')[0].trim();
-                let comments = fileContent.split('----- COMMENTS -----').slice(1).join('\n').trim().split('\n')
-                comments = comments.filter(comment => comment.trim() !== '');
 
-                // Log the content
-                // console.log(`\n\Title: ${title}`);
-                // console.log(`Body:\n${body}`);
-                // for (const comment of comments) {
-                //   console.log(`Comment: '${comment.trim()}'`);
-                // }
-                // console.log(`\n`);
+                const afterTitle = fileContent.split('\n').slice(1).join('\n');
+                const [bodyPart, commentsPartRaw = ""] = afterTitle.split('----- COMMENTS -----');
+
+                const body = bodyPart.trim();
+
+                // Treat comments as blocks separated by "\n---\n" (edit your markdown files accordingly),
+                // falling back to single-block if no separator exists.
+                const comments = commentsPartRaw
+                  .trim()
+                  .split(/\n---\n/g)
+                  .map(c => c.trim())
+                  .filter(Boolean);
 
                 // Create the issue
                 const issue = await github.rest.issues.create({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  title: title,
-                  body: body,
+                  title,
+                  body,
                   labels: [label],
                 });
 
+                const issueNumber = Number(issue.data.number);
+                if (!Number.isInteger(issueNumber)) {
+                  throw new Error(`Invalid issue number returned: ${issue.data.number}`);
+                }
+
                 // Add comments
-                for (const comment of comments) {
+                for (const commentBody of comments) {
                   await github.rest.issues.createComment({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    issue_number: issue.data.number,
-                    body: comment,
+                    issue_number: issueNumber,
+                    body: commentBody,
                   });
                 }
 
