@@ -102,6 +102,88 @@ competency_matrices = {
                 "growth": "Sets vision for cloud practice evolution"
             }
         }
+    },
+    "Data Analytics": {
+        "Emerging": {
+            "technical_excellence": {
+                "domain_knowledge": "Understanding of basic data analysis concepts and statistical fundamentals",
+                "tools_proficiency": "Learning SQL, Excel, and basic visualization tools (Tableau, Power BI)",
+                "architecture_design": "Creates simple reports and dashboards with guidance",
+                "best_practices": "Developing awareness of data quality and governance principles"
+            },
+            "client_delivery": {
+                "engagement": "Supports client meetings and presents findings with senior guidance",
+                "project_ownership": "Owns specific data analysis tasks and small reporting projects",
+                "quality": "Delivers accurate analysis that meets requirements with review",
+                "communication": "Communicates data insights clearly and asks for clarification when needed"
+            },
+            "leadership": {
+                "knowledge_sharing": "Documents analysis methodologies and shares learnings",
+                "mentoring": "Learns from senior data analysts and attends training",
+                "community": "Participates in data practice meetings and workshops",
+                "growth": "Actively builds foundational analytics and technical skills"
+            }
+        },
+        "Proficient": {
+            "technical_excellence": {
+                "domain_knowledge": "Strong understanding of advanced analytics, predictive modeling, and data science concepts",
+                "tools_proficiency": "Proficient with Python/R, advanced SQL, and multiple BI platforms",
+                "architecture_design": "Designs comprehensive analytics solutions and complex dashboards independently",
+                "best_practices": "Applies data quality frameworks and implements data governance standards"
+            },
+            "client_delivery": {
+                "engagement": "Leads data-focused discussions and translates business needs into analytical solutions",
+                "project_ownership": "Owns complete analytics workstreams and deliverables",
+                "quality": "Delivers production-ready analytics with minimal oversight",
+                "communication": "Effectively communicates complex insights to non-technical stakeholders"
+            },
+            "leadership": {
+                "knowledge_sharing": "Presents at analytics forums and creates best practice documentation",
+                "mentoring": "Mentors emerging analysts on techniques and tools",
+                "community": "Contributes to analytics standards and reusable assets",
+                "growth": "Pursues analytics certifications and stays current with industry trends"
+            }
+        },
+        "Advanced": {
+            "technical_excellence": {
+                "domain_knowledge": "Deep expertise in machine learning, statistical modeling, and advanced analytics across industries",
+                "tools_proficiency": "Masters advanced techniques in Python/R, big data platforms (Spark, Databricks), and MLOps",
+                "architecture_design": "Architects enterprise-scale analytics platforms and data science solutions",
+                "best_practices": "Defines analytics best practices and establishes data-driven culture"
+            },
+            "client_delivery": {
+                "engagement": "Trusted advisor to executives on data strategy and analytics roadmaps",
+                "project_ownership": "Leads multiple complex analytics engagements simultaneously",
+                "quality": "Sets quality standards for analytics delivery across practice",
+                "communication": "Influences strategic business decisions through data storytelling"
+            },
+            "leadership": {
+                "knowledge_sharing": "Publishes thought leadership articles and speaks at industry conferences",
+                "mentoring": "Develops proficient analysts into senior practitioners and subject matter experts",
+                "community": "Shapes analytics practice offerings and methodologies",
+                "growth": "Drives innovation in analytics techniques and emerging technologies"
+            }
+        },
+        "Expert": {
+            "technical_excellence": {
+                "domain_knowledge": "Industry-recognized authority in data science and advanced analytics",
+                "tools_proficiency": "Contributes to analytics tools, frameworks, and open-source projects",
+                "architecture_design": "Pioneers innovative analytics architectures and AI/ML solutions",
+                "best_practices": "Establishes industry-leading analytics standards and methodologies"
+            },
+            "client_delivery": {
+                "engagement": "Drives enterprise-wide data transformation and analytics strategies",
+                "project_ownership": "Owns practice-level analytics excellence and client satisfaction",
+                "quality": "Defines quality frameworks adopted across the organization",
+                "communication": "Recognized thought leader shaping the future of analytics"
+            },
+            "leadership": {
+                "knowledge_sharing": "Keynote speaker and published author in analytics and data science",
+                "mentoring": "Builds analytics capability across the entire practice",
+                "community": "Leads practice strategy, market positioning, and innovation",
+                "growth": "Sets vision for analytics practice evolution and industry direction"
+            }
+        }
     }
 }
 
@@ -125,7 +207,7 @@ capabilities = {
         "industry_verticals": ["Retail", "Healthcare", "Manufacturing"],
         "capacity": 35,
         "consultants": ["emma.davis@slalom.com", "sophia.wilson@slalom.com"],
-        "has_competency_matrix": False
+        "has_competency_matrix": True
     },
     "DevOps Engineering": {
         "description": "CI/CD pipeline design, infrastructure automation, and containerization",
